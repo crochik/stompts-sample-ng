@@ -1,27 +1,29 @@
-# Rabbitmq
+# Sample Code
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+This is a simple project to test connecting to RabbitMq via Stomp using the stompTs package.
 
-## Development server
+## How to test
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+1. Run rabbitmq (docker): 
+```docker run -dit -p 15672:15672 -p 5672:5672 -p 15674:15674 --name rabbitmq --rm crochik/rabbitmq:3.7-stomp```
 
-## Code scaffolding
+2. Run this application:
+```ng serve```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+3. Connect to the RabbitMq Management in the web browser: `http://localhost:15672` using credentials `guest`/`guest`.
 
-## Build
+4. Click on the `Queue` tab. There should be on queue named `stomp-subscription-...`, select it by clicking on the name.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+5. on the bottom of the page you will find a `publish message`
 
-## Running unit tests
+    The code assumes two possible formats for messages: `json` or `text`. If a header `content-type` is included with the value `application/json` the service will try to parse it and then output a prettyfied version of the json. Otherwise, the service will just output the body "as is".
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+6. send a text message: on the payload field add some text and press the "Publish Message" button
 
-## Running end-to-end tests
+7. send a json message: add a header `content-type` with value `application/json`, paste a valid json in the payload button and then push the "Publish Message" button.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Notes
 
-## Further help
+* the app compomnent is subscribing to the topic `/topic/test.#`. In practice this means that it is that the queue is bound to the exchange `amq.topic` using the routing key `test.#` (any message published to amq.topic that starts with `test.` or is `test` will be routed to this queue and should show in the web page)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+* there is no error handling. Make sure to look at the browser console for messages.

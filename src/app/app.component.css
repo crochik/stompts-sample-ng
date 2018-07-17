@@ -1,0 +1,15 @@
+.header {
+    background-color: lightgray;
+    text-align: center;
+    font-size: 12pt;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.console {
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    right: 10px;
+    bottom: 10px;
+    overflow: auto;
+    border: 1px solid gray;
+}
